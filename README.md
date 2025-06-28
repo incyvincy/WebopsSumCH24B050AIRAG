@@ -71,16 +71,6 @@ uvicorn app:app --reload
 * Push to GitHub
 * Deploy to [Render](https://render.com) or [Railway](https://railway.app)
 
-## Optional Enhancements
-
-* Add reranking using OpenAI's rerank API or Cohere.
-* Use hybrid search filters for tags or metadata.
-* Integrate frontend chatbot with `Vercel AI SDK`.
-* Replace Weaviate with pgvector or Supabase if needed.
-
-## License
-
-MIT License. Feel free to fork, adapt, and extend.
 
 ## Author
 
