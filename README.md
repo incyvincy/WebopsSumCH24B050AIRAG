@@ -1,78 +1,81 @@
-# FAQ Chatbot - RAG-Based Retrieval System
+# RAG-Based FAQ Chatbot with FastAPI and Weaviate
 
-This project implements a **Retrieval-Augmented Generation (RAG)** pipeline using semantic embeddings and vector search to deliver accurate answers to user questions based on a curated FAQ dataset.
+This project is a Retrieval-Augmented Generation (RAG) chatbot designed to answer FAQ-style questions using a combination of semantic search and LLMs. The backend is built with FastAPI and leverages Weaviate for vector-based document storage and retrieval.
 
-## Overview
+## 🔧 Features
 
-This application allows users to query a collection of FAQs scraped from an academic website and receive the most relevant answers. It uses `sentence-transformers` for embedding generation and `Weaviate Cloud` for vector similarity search. An alternate version using `FAISS` is also included for local vector store experimentation.
+- **FastAPI** backend for serving RESTful endpoints
+- **Weaviate** cloud vector DB for storing and querying document embeddings
+- **SentenceTransformers** to embed and match user queries
+- **Swagger UI** auto-generated for testing endpoints
+- **JSON-based FAQ ingestion and scraping pipeline**
 
-## Features
-
-* Web scraping of questions, answers, tags, and suggested questions.
-* Semantic embedding of FAQ data using `sentence-transformers`.
-* Indexing and search powered by Weaviate Cloud (Hybrid Vector + Keyword search).
-* Command-line and API-based interfaces.
-* Docker/Render compatible backend architecture.
-
-## Tech Stack
-
-* **Language**: Python 3.10+
-* **Embedding Model**: `sentence-transformers/all-mpnet-base-v2`
-* **Vector DB**: Weaviate (via Cloud instance)
-* **Web Scraping**: BeautifulSoup
-* **Web Framework**: FastAPI
-* **Hosting Options**: Render / Railway / Vercel Edge
-
-## Folder Structure
+## 🗂️ Project Structure
 
 ```
-├── app.py                  # FastAPI backend for FAQ querying
-├── faq_data.json           # Scraped and cleaned FAQ dataset
-├── scrape_faq.py           # Scraper to build faq_data.json
-├── upload_to_weaviate.py   # Uploads embedded FAQ data to Weaviate
-├── query_weaviate.py       # CLI script to perform hybrid query
-├── faq_rag_demo.py         # FAISS-based local search fallback
+├── app.py                  # FastAPI main entrypoint
+├── faq_api.py              # Flask-style script for local testing
+├── faq_data.json           # Preprocessed FAQs
+├── faq_rag_demo.py         # Offline retrieval-augmented QA demo
+├── query_weaviate.py       # Utility to search queries on Weaviate
 ├── requirements.txt        # Python dependencies
-├── Procfile                # Render-compatible startup file
-├── README.md               # Project documentation
+├── scrape_faq.py           # Web scraper for FAQ generation
+├── upload_to_weaviate.py   # Script to push data to Weaviate
+├── README.md               # Documentation
+└── Procfile                # For deployment (e.g., on Railway/Heroku)
 ```
 
-## Usage
+## 🚀 How It Works
 
-### 1. Scrape FAQ Data
+1. **Data Prep**: Raw FAQ content is scraped and structured into `faq_data.json`.
+2. **Vectorization**: The content is embedded via SentenceTransformer and uploaded to Weaviate.
+3. **Querying**: User question is embedded and compared against stored embeddings for top match.
+4. **Response**: The answer(s) with highest cosine similarity are returned via the `/ask` endpoint.
 
+## 🛠️ Setup
+
+1. **Clone the repository**:
 ```bash
-python scrape_faq.py
+git clone https://github.com/incyvincy/WebopsSumCH24B050AIRAG.git
+cd WebopsSumCH24B050AIRAG
 ```
 
-### 2. Upload to Weaviate
-
-Ensure you have your API key configured as an environment variable.
-
+2. **Create and activate a virtual environment**:
 ```bash
-python upload_to_weaviate.py
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
 ```
 
-### 3. Query CLI
-
+3. **Install dependencies**:
 ```bash
-python query_weaviate.py
+pip install -r requirements.txt
 ```
 
-### 4. Run Backend API
-
+4. **Run FastAPI server**:
 ```bash
 uvicorn app:app --reload
 ```
 
-## Deployment
+5. **Access Swagger UI**:
+Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) in your browser.
 
-* Add your `Procfile` with: `web: uvicorn app:app --host=0.0.0.0 --port=${PORT:-8000}`
-* Push to GitHub
-* Deploy to [Render](https://render.com) or [Railway](https://railway.app)
+## 🌐 Environment Variables
+Create a `.env` file or export these:
+```env
+WEAVIATE_URL="<your_weaviate_instance_url>"
+my-webops-api-key-weaviate="<your_api_key>"
+```
 
+## 🧠 Example Request
+```json
+POST /ask
+{
+  "question": "What is Electrical Engineering?"
+}
+```
 
-## Author
+## 🙌 Authors
+- CH24B050 – AIRAG
 
-CH24B050 - Summer AI Mini Project
-
+---
+**Note:** This project is academic and experimental in nature.
