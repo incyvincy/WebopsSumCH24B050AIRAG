@@ -1,18 +1,16 @@
-# app.py
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 import weaviate
 import os
 
-# Define request body
+app = FastAPI()
+
 class QueryInput(BaseModel):
     question: str
 
-# Load model
 model = SentenceTransformer("sentence-transformers/all-mpnet-base-v2")
 
-# Init Weaviate client
 WEAVIATE_URL = os.getenv("WEAVIATE_URL") or "https://5pfynfulru2wsgokeozxnq.c0.asia-southeast1.gcp.weaviate.cloud"
 API_KEY = os.getenv("my-webops-api-key-weaviate")
 
@@ -24,31 +22,33 @@ client = weaviate.connect_to_weaviate_cloud(
     auth_credentials=weaviate.auth.AuthApiKey(API_KEY)
 )
 
-app = FastAPI()
+@app.post("/ask", response_model=dict)
+def ask_faq(input_data: QueryInput):
+    query = input_data.question.strip()
+    if not query:
+        raise HTTPException(status_code=422, detail="Empty query")
 
-@app.post("/ask")
-def ask_faq(input: QueryInput):
-    question = input.question.strip()
-    embedding = model.encode(question).tolist()
+    embedding = model.encode(query).tolist()
 
     try:
         results = client.collections.get("FAQ").query.hybrid(
-            query=question,
+            query=query,
             vector=embedding,
             limit=3
         )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Hybrid query failed: {str(e)}")
+    except weaviate.exceptions.WeaviateQueryError as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-    response = []
+    if not results.objects:
+        return {"answer": "No matching answers found."}
+
+    answers = []
     for result in results.objects:
-        item = {
+        answers.append({
             "question": result.properties.get("question"),
             "answer": result.properties.get("answer"),
             "tag": result.properties.get("tag"),
-            "link": result.properties.get("link"),
-            "suggested_questions": result.properties.get("suggested_questions", [])
-        }
-        response.append(item)
-    
-    return {"results": response}
+            "link": result.properties.get("link")
+        })
+
+    return {"results": answers}

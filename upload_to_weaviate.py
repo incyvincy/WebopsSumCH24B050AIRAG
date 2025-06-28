@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 import json
 import sys
 import os
-from weaviate.collections.classes.config import DataType  # ✅ Compatible import path for Weaviate v4.15+
+from weaviate.collections.classes.config import DataType  #Compatible import path for Weaviate v4.15+
 
 WEAVIATE_URL = "https://5pfynfulru2wsgokeozxnq.c0.asia-southeast1.gcp.weaviate.cloud"
 EMBED_MODEL = "sentence-transformers/all-mpnet-base-v2"
