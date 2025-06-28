@@ -10,7 +10,7 @@ This project is a Retrieval-Augmented Generation (RAG) chatbot designed to answe
 - **Swagger UI** auto-generated for testing endpoints
 - **JSON-based FAQ ingestion and scraping pipeline**
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 ├── app.py                  # FastAPI main entrypoint
@@ -25,14 +25,14 @@ This project is a Retrieval-Augmented Generation (RAG) chatbot designed to answe
 └── Procfile                # For deployment (e.g., on Railway/Heroku)
 ```
 
-## 🚀 How It Works
+## How It Works
 
 1. **Data Prep**: Raw FAQ content is scraped and structured into `faq_data.json`.
 2. **Vectorization**: The content is embedded via SentenceTransformer and uploaded to Weaviate.
 3. **Querying**: User question is embedded and compared against stored embeddings for top match.
 4. **Response**: The answer(s) with highest cosine similarity are returned via the `/ask` endpoint.
 
-## 🛠️ Setup
+## Setup
 
 1. **Clone the repository**:
 ```bash
@@ -59,14 +59,14 @@ uvicorn app:app --reload
 5. **Access Swagger UI**:
 Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) in your browser.
 
-## 🌐 Environment Variables
+## Environment Variables
 Create a `.env` file or export these:
 ```env
 WEAVIATE_URL="<your_weaviate_instance_url>"
 my-webops-api-key-weaviate="<your_api_key>"
 ```
 
-## 🧠 Example Request
+## Example Request
 ```json
 POST /ask
 {
