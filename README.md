@@ -2,7 +2,7 @@
 
 This project is a Retrieval-Augmented Generation (RAG) chatbot designed to answer FAQ-style questions using a combination of semantic search and LLMs. The backend is built with FastAPI and leverages Weaviate for vector-based document storage and retrieval.
 
-## 🔧 Features
+## Features
 
 - **FastAPI** backend for serving RESTful endpoints
 - **Weaviate** cloud vector DB for storing and querying document embeddings
