@@ -74,7 +74,7 @@ POST /ask
 }
 ```
 
-## 🙌 Authors
+## Authors
 - CH24B050 – AIRAG
 
 ---
